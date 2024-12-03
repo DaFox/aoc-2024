@@ -1,3 +1,4 @@
+use std::str::FromStr;
 use crate::aoc::read_input;
 
 fn is_safe(report: Vec<usize>) -> bool {
@@ -18,21 +19,27 @@ fn without_nth<T: Copy>(slice: &[T], n: usize) -> Vec<T> {
     .collect()
 }
 
+fn split_num<T: Default + FromStr>(line: &str) -> Vec<T> {
+  line
+    .split(' ')
+    .map(|n| str::parse::<T>(n).unwrap_or(T::default()))
+    .collect()
+}
+
 pub fn solution_1() -> String {
     let reports = read_input(2, 1)
       .iter()
-      .map(|line| line.split(' ').map(|n| str::parse::<usize>(n).unwrap()).collect::<Vec<_>>())
+      .map(|s| split_num(s))
       .filter(|report| is_safe(report.clone()))
       .count();
 
     reports.to_string()
 }
 
-
 pub fn solution_2() -> String {
     let reports = read_input(2, 1)
       .iter()
-      .map(|line| line.split(' ').map(|n| str::parse::<usize>(n).unwrap()).collect::<Vec<_>>())
+      .map(|s| split_num(s))
       .filter(|report| (0..=report.len()).any(|i| is_safe(without_nth(&report, i))))
       .count();
 

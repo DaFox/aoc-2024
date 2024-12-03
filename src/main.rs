@@ -1,6 +1,7 @@
 mod aoc;
 mod day01;
 mod day02;
+mod day03;
 
 use std::env;
 use std::collections::HashMap;
@@ -49,6 +50,7 @@ fn setup() -> HashMap<u8, (Box<SolutionFn>, Box<SolutionFn>)> {
     HashMap::from([
         day!(day01, 1),
         day!(day02, 2),
+        day!(day03, 3)
     ])
 }
 
@@ -78,5 +80,10 @@ mod tests {
     #[test]
     fn test_day_02() {
         run_test(setup(), 2, "2", "4");
+    }
+
+    #[test]
+    fn test_day_03() {
+        run_test(setup(), 3, "161", "48");
     }
 }
