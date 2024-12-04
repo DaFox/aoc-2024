@@ -49,6 +49,12 @@ fn diagonals(matrix: &Vec<String>) -> Vec<String> {
   target
 }
 
+fn is_xmas(matrix: &Vec<Vec<char>>, i: usize, k: usize) -> bool {
+    matrix[i][k] == 'A' &&
+      (matrix[i - 1][k - 1] == 'M' && matrix[i + 1][k + 1] == 'S' || matrix[i - 1][k - 1] == 'S' && matrix[i + 1][k + 1] == 'M') && 
+      (matrix[i - 1][k + 1] == 'S' && matrix[i + 1][k - 1] == 'M' || matrix[i - 1][k + 1] == 'M' && matrix[i + 1][k - 1] == 'S')
+}
+
 pub fn solution_1() -> String {  
   let input = read_input(4, 1);
 
@@ -62,23 +68,14 @@ pub fn solution_1() -> String {
 }
 
 pub fn solution_2() -> String {
-  let input = read_input(4, 1);
-  let mut count = 0;
+  let matrix:Vec<Vec<char>> = read_input(4, 1)
+    .into_iter()
+    .map(|line| line.chars().collect())
+    .collect();
 
-  // We just have to scan all rows >1 and <len()-2 for an A. Then check the surounding fields.
-  let char_vec:Vec<Vec<char>> = input.into_iter().map(|line| line.chars().collect()).collect();
-
-  for i in 1..(char_vec.len() - 1) {
-    for k in 1..(char_vec[i].len() - 1) {
-      if char_vec[i][k] == 'A' {
-        // Check the suroundings
-        if (char_vec[i - 1][k - 1] == 'M' && char_vec[i + 1][k + 1] == 'S' || char_vec[i - 1][k - 1] == 'S' && char_vec[i + 1][k + 1] == 'M') 
-          && (char_vec[i - 1][k + 1] == 'S' && char_vec[i + 1][k - 1] == 'M' || char_vec[i - 1][k + 1] == 'M' && char_vec[i + 1][k - 1] == 'S') {
-          count += 1;
-        }
-      }
-    }
-  }
-  
-  count.to_string()
+  (1..(matrix.len() - 1))
+    .flat_map(|i| (1..matrix[i].len() - 1).map(move |k| (i, k)))
+    .filter(|(i, k)| is_xmas(&matrix, *i, *k))
+    .count()
+    .to_string()
 }
