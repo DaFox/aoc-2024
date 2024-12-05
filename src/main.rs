@@ -3,6 +3,7 @@ mod day01;
 mod day02;
 mod day03;
 mod day04;
+mod day05;
 
 use std::env;
 use std::collections::HashMap;
@@ -23,7 +24,7 @@ fn get_day_arg() -> Option<u8> {
     None
 }
 
-fn run_day(days: HashMap<u8, (Box<SolutionFn>, Box<SolutionFn>)>, day: u8) {
+fn run_day(days: &HashMap<u8, (Box<SolutionFn>, Box<SolutionFn>)>, day: u8) {
     println!("Day {:0>2}", day);
     println!();
 
@@ -33,6 +34,8 @@ fn run_day(days: HashMap<u8, (Box<SolutionFn>, Box<SolutionFn>)>, day: u8) {
     } else {
         println!("  Solution for day {} is not implemented yet.", day);
     }
+
+    println!();
 }
 
 macro_rules! day {
@@ -52,13 +55,20 @@ fn setup() -> HashMap<u8, (Box<SolutionFn>, Box<SolutionFn>)> {
         day!(day01, 1),
         day!(day02, 2),
         day!(day03, 3),
-        day!(day04, 4)
+        day!(day04, 4),
+        day!(day05, 5)
     ])
 }
 
 fn main() {
+    let all_days = setup();
+
     if let Some(day) = get_day_arg() {
-        run_day(setup(), day);
+        run_day(&all_days, day);
+    } else {
+        for day in 0..all_days.len() {
+            run_day(&all_days, day as u8);
+        }
     }
 }
 
@@ -92,5 +102,10 @@ mod tests {
     #[test]
     fn test_day_04() {
         run_test(setup(), 4, "18", "9");
+    }
+
+    #[test]
+    fn test_day_05() {
+        run_test(setup(), 5, "143", "123");
     }
 }
